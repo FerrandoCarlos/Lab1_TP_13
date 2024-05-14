@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 11, 2024 at 02:54 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Servidor: 127.0.0.1:3306
+-- Tiempo de generación: 14-05-2024 a las 10:13:23
+-- Versión del servidor: 8.3.0
+-- Versión de PHP: 8.2.18
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,104 +18,68 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `universidadulp`
+-- Base de datos: `universidadulp`
 --
+CREATE DATABASE IF NOT EXISTS `universidadulp` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `universidadulp`;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `alumno`
+-- Estructura de tabla para la tabla `alumno`
 --
 
-CREATE TABLE `alumno` (
-  `idAlumno` int(11) NOT NULL,
-  `dni` int(11) NOT NULL,
-  `apellido` varchar(100) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
+DROP TABLE IF EXISTS `alumno`;
+CREATE TABLE IF NOT EXISTS `alumno` (
+  `idAlumno` int NOT NULL AUTO_INCREMENT,
+  `dni` int NOT NULL,
+  `apellido` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
   `fechaNacimiento` date NOT NULL,
-  `estado` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `estado` tinyint(1) NOT NULL,
+  PRIMARY KEY (`idAlumno`),
+  UNIQUE KEY `dni` (`dni`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `inscripcion`
+-- Estructura de tabla para la tabla `inscripcion`
 --
 
-CREATE TABLE `inscripcion` (
-  `idInscripto` int(11) NOT NULL,
-  `nota` int(11) NOT NULL,
-  `idAlumno` int(11) DEFAULT NULL,
-  `idMateria` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TABLE IF EXISTS `inscripcion`;
+CREATE TABLE IF NOT EXISTS `inscripcion` (
+  `idInscripto` int NOT NULL AUTO_INCREMENT,
+  `nota` int NOT NULL,
+  `idAlumno` int DEFAULT NULL,
+  `idMateria` int DEFAULT NULL,
+  PRIMARY KEY (`idInscripto`),
+  KEY `idAlumno` (`idAlumno`),
+  KEY `idMateria` (`idMateria`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `materia`
+-- Estructura de tabla para la tabla `materia`
 --
 
-CREATE TABLE `materia` (
-  `idMateria` int(11) NOT NULL,
-  `nombre` varchar(100) NOT NULL,
-  `año` int(11) NOT NULL,
-  `estado` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TABLE IF EXISTS `materia`;
+CREATE TABLE IF NOT EXISTS `materia` (
+  `idMateria` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `año` int NOT NULL,
+  `estado` tinyint(1) NOT NULL,
+  PRIMARY KEY (`idMateria`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indexes for dumped tables
---
-
---
--- Indexes for table `alumno`
---
-ALTER TABLE `alumno`
-  ADD PRIMARY KEY (`idAlumno`),
-  ADD UNIQUE KEY `dni` (`dni`);
-
---
--- Indexes for table `inscripcion`
---
-ALTER TABLE `inscripcion`
-  ADD PRIMARY KEY (`idInscripto`),
-  ADD KEY `idAlumno` (`idAlumno`),
-  ADD KEY `idMateria` (`idMateria`);
-
---
--- Indexes for table `materia`
---
-ALTER TABLE `materia`
-  ADD PRIMARY KEY (`idMateria`),
-  ADD UNIQUE KEY `nombre` (`nombre`);
-
---
--- AUTO_INCREMENT for dumped tables
+-- Restricciones para tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `alumno`
---
-ALTER TABLE `alumno`
-  MODIFY `idAlumno` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `inscripcion`
---
-ALTER TABLE `inscripcion`
-  MODIFY `idInscripto` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `materia`
---
-ALTER TABLE `materia`
-  MODIFY `idMateria` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `inscripcion`
+-- Filtros para la tabla `inscripcion`
 --
 ALTER TABLE `inscripcion`
   ADD CONSTRAINT `inscripcion_ibfk_1` FOREIGN KEY (`idAlumno`) REFERENCES `alumno` (`idAlumno`),
