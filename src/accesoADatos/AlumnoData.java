@@ -15,11 +15,12 @@ import java.time.LocalDate;
  */
 public class AlumnoData {
 
-    private static String tabla = " alumno ";
+ 
     private static Alumno alumnos;
 
     public static boolean guardarAlumno(Alumno alumno) {
-        String query = "INSERT INTO" + alumno + "(dni, apellido,nombre,fechaNacimiento,estado) VALUES (?,?,?,?,?)";
+        String query = "INSERT INTO alumno (dni, apellido,nombre,fechaNacimiento,estado) VALUES (?,?,?,?,?)";
+        
         boolean res = false;
         if (Db.getConexion()) {
             try {
@@ -27,8 +28,8 @@ public class AlumnoData {
                 ps.setInt(1, alumno.getDni());
                 ps.setString(2, alumno.getApellido());
                 ps.setString(3, alumno.getNombre());
-                ps.setDate(3, Date.valueOf(alumno.getFechaNacimiento()));
-                ps.setBoolean(4, alumno.getEstado());
+                ps.setDate(4, Date.valueOf(alumno.getFechaNacimiento()));
+                ps.setBoolean(5, alumno.getEstado());
                 ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
@@ -41,6 +42,7 @@ public class AlumnoData {
             }
         }
         //ver donde cerrrar la coneccion puede ser en el main
+        
         return res;
     }
 
@@ -50,7 +52,7 @@ public class AlumnoData {
         alumnos = null;
         try {
 
-            res = Db.consulta("Select * from " + tabla);
+            res = Db.consulta("Select * from alumno");
             if (res != null) {
                 while (res.next()) {
                     //`idAlumno`, `dni`, `apellido`, `nombre`, `fechaNacimiento`, `estado`
