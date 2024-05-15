@@ -1,4 +1,3 @@
-
 package Entidades;
 
 /**
@@ -6,16 +5,15 @@ package Entidades;
  * @author Ariel Zurita
  */
 public class Materia {
-    
+
     private int idMateria;
     private String nombre;
     private int año;
     private boolean estado;
-    
-    
- public Materia(){
-     
- }
+
+    public Materia() {
+
+    }
 
     public Materia(int idMateria, String nombre, int año, boolean estado) {
         this.idMateria = idMateria;
@@ -62,12 +60,7 @@ public class Materia {
     }
 
     public String getEstado() {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet.");
     }
- 
-    
 
-    
-    
-    
 }
