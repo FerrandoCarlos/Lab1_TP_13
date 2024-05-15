@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
- * @author Ferrando Carlos | Martin Piriz | Ariel | Agustin Jofre
+ * @author Ferrando Carlos | Martin Piriz | Ariel Zurita | Agustin Jofre
  */
 public class Main {
 
