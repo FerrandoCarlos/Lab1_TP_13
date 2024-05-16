@@ -40,7 +40,7 @@ public class InscripcionData {
                 Db.msjError.add("Inscripción: guardarInscripcion ->" + ex.getMessage());
             }
         }
-        return res;
+        return res; 
     }
     
     public static boolean actulizarNota(int idAlumno,int idMateria, double nota){
