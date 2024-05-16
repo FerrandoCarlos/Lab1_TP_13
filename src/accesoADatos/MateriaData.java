@@ -1,7 +1,7 @@
 
 package accesoADatos;
 
-import Entidades.Materia;
+import entidades.Materia;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
