@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.time.LocalDate;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -45,6 +46,40 @@ public class AlumnoData {
         
         return res;
     }
+    
+        public Alumno buscarAlumno(int id){
+    
+                String sql = "SELECT dni, apellido, nombre, fechaNacimiento FROM alumno WHERE idAlumno = ?";
+            
+            Alumno alumno = null;    
+            if (Db.getConexion()) {    
+            try {
+            PreparedStatement ps = Db.conec.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+            
+                alumno = new Alumno();
+                
+                alumno.setIdAlumno(id);
+                alumno.setDni(rs.getInt("dni"));
+                alumno.setApellido(rs.getString("apellido"));
+                alumno.setNombre(rs.getString("nombre"));
+                alumno.setFechaNacimiento(rs.getDate("fechaNacimiento").toLocalDate());
+                alumno.setEstado(true);
+                
+            }else{
+            JOptionPane.showMessageDialog(null,"No existe ese alumno");
+            }
+            ps.close();
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Error al acceder a la tabla alumnos");
+        }
+            }
+    return alumno;
+    }
+        
 
     public static ArrayList<Alumno> listarAlumno() {
         ArrayList<Alumno> lista = new ArrayList<>();
@@ -73,6 +108,34 @@ public class AlumnoData {
 
         return lista;
     }
+    
+    
+    public static ArrayList<Alumno> listarAlumnosYNota() {
+    ArrayList<Alumno> lista = new ArrayList<>();
+    
+    try {
+        ResultSet res = Db.consulta("SELECT a.idAlumno, a.dni, a.apellido, a.nombre, a.fechaNacimiento " +
+                                    "FROM alumno a " +
+                                    "JOIN inscripcion i ON a.idAlumno = i.idAlumno " +
+                                    "WHERE i.nota > 8");
+        if (res != null) {
+            while (res.next()) {
+                int idAlumno = res.getInt("idAlumno");
+                int dni = res.getInt("dni");
+                String apellido = res.getString("apellido");
+                String nombre = res.getString("nombre");
+                LocalDate fechaNacimiento = res.getDate("fechaNacimiento").toLocalDate();
+                
+
+                lista.add(new Alumno(idAlumno, dni, apellido, nombre, fechaNacimiento, true));
+            }
+        }
+    } catch (SQLException ex) {
+        Db.msjError.add("Error al acceder a la tabla de alumnos: " + ex.getMessage());
+    }
+
+    return lista;
+}
 
     //fin
 }

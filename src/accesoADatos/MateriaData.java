@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  * Clase para acceder a los datos de la entidad Materia en la base de datos.
@@ -28,7 +29,7 @@ public class MateriaData {
                 ps.setInt(1, materia.getIdMateria());
                 ps.setString(2, materia.getNombre());
                 ps.setInt(3, materia.getAño());
-                ps.setString(4, materia.getEstado());
+                ps.setBoolean(4, materia.isEstado());
                 ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
@@ -69,6 +70,31 @@ public class MateriaData {
         }
 
         return lista;
+    }
+
+    public Materia buscarMateria(int id){
+        String sql = "SELECT nombre, año, estado FROM materia WHERE idMateria = ?";
+        Materia materia = null;    
+        if (Db.getConexion()) {    
+            try {
+                PreparedStatement ps = Db.conec.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                if(rs.next()){
+                    materia = new Materia();
+                    materia.setIdMateria(id);
+                    materia.setNombre(rs.getString("nombre"));
+                    materia.setAño(rs.getInt("año"));
+                    materia.setEstado(rs.getBoolean("estado"));
+                } else {
+                    JOptionPane.showMessageDialog(null, "No existe esa materia");
+                }
+                ps.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Error al acceder a la tabla de materias");
+            }
+        }
+        return materia;
     }
 }
 
